@@ -44,6 +44,7 @@
 #include <algorithm>
 #include <cstring>
 #include <string_view> // C++20
+#include <charconv>
 
 struct Face { int a, b, c; }; // 0-based indices
 
@@ -60,8 +61,8 @@ struct EdgeKeyHash {
   }
 };
 
-// Parse integer before first '/' (OBJ index)
-static int parse_index_token(const std::string& tok) {
+/*
+static int parse_index_token(const std::string& tok) { // parse integer before first '/' (vertex)
   int i = 0;
   size_t pos = 0;
   while (pos < tok.size() && tok[pos] != '/') pos++;
@@ -69,6 +70,19 @@ static int parse_index_token(const std::string& tok) {
   if (head.empty()) return 0;
   try { i = std::stoi(head); } catch (...) { i = 0; }
   return i;
+}
+*/
+static int parse_index_token(const std::string& tok) noexcept {
+  std::string_view sv(tok);
+  size_t slash = sv.find('/'); // cut at the first '/'
+  if (slash != std::string_view::npos) sv = sv.substr(0, slash);
+  if (sv.empty()) return 0;    // no number present
+  int val = 0;
+  const char* first = sv.data();
+  const char* last  = sv.data() + sv.size();
+  auto [ptr, ec]    = std::from_chars(first, last, val, 10); // C++17
+  if (ec != std::errc()) return 0;
+  return val;
 }
 
 // Convert possibly negative OBJ index (1-based, negatives are relative)
@@ -83,7 +97,6 @@ struct Mesh {
   std::vector<Face> F;
 };
 
-// ---------- OBJ loader ----------
 static bool load_obj(const std::string& path, Mesh& mesh) {
   std::ifstream ifs(path);
   if (!ifs) { std::cerr << "Cannot open: " << path << "\n"; return false; }
@@ -444,12 +457,9 @@ static void motion_cb(int x, int y) {
   glutPostRedisplay();
 }
 
-// ---------- main ----------
 int main(int argc, char** argv) {
   if (argc < 2) { std::cerr << "Usage: " << argv[0] << " mesh.obj\n"; return 1; }
-
-  glutInit(&argc, argv); // real GLUT init (we will open a window)
-
+  glutInit(&argc, argv);
   if (!load_obj(argv[1], g_mesh)) return 1;
   std::cout << "Loaded V=" << g_mesh.V.size() << " F=" << g_mesh.F.size() << "\n";
 

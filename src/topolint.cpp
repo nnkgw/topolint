@@ -114,7 +114,8 @@ static bool load_obj(const std::string& path, Mesh& mesh) {
       for (size_t k = 1; k + 1 < idxs.size(); ++k) F.push_back({idxs[0], idxs[k], idxs[k + 1]});
     }
   }
-  mesh.V.swap(V); mesh.F.swap(F);
+  mesh.V.swap(V);
+  mesh.F.swap(F);
   return true;
 }
 
@@ -137,20 +138,18 @@ static double point_segment_distance(const glm::vec3& A, const glm::vec3& B, con
   return glm::length(P - Q);
 }
 
-static void build_edge_faces(
-  const std::vector<Face>& F,
-  std::unordered_map<EdgeKey, std::vector<int>, EdgeKeyHash>& edge2faces) {
+static void build_edge_faces(const std::vector<Face>& F, std::unordered_map<EdgeKey, std::vector<int>, EdgeKeyHash>& edge2faces) {
   for (int fi = 0; fi < (int)F.size(); ++fi) {
-    int a = F[fi].a, b = F[fi].b, c = F[fi].c;
+    int a = F[fi].a;
+    int b = F[fi].b;
+    int c = F[fi].c;
     edge2faces[EdgeKey(a, b)].push_back(fi);
     edge2faces[EdgeKey(b, c)].push_back(fi);
     edge2faces[EdgeKey(c, a)].push_back(fi);
   }
 }
 
-static void build_vertex_faces(
-  int nv, const std::vector<Face>& F,
-  std::vector<std::vector<int>>& vfaces) {
+static void build_vertex_faces(int nv, const std::vector<Face>& F, std::vector<std::vector<int>>& vfaces) {
   vfaces.assign(nv, {});
   for (int fi = 0; fi < (int)F.size(); ++fi) {
     vfaces[F[fi].a].push_back(fi);
@@ -450,7 +449,6 @@ int main(int argc, char** argv) {
   glutInit(&argc, argv);
   if (!load_obj(argv[1], g_mesh)) return 1;
   std::cout << "Loaded V=" << g_mesh.V.size() << " F=" << g_mesh.F.size() << "\n";
-
   build_edge_faces(g_mesh.F, g_edge2faces);
   build_vertex_faces((int)g_mesh.V.size(), g_mesh.F, g_vfaces);
   detect_nonmanifold();

@@ -101,7 +101,7 @@ static bool load_obj(const std::string& path, Mesh& mesh) {
       char ch; float x, y, z;
       iss >> ch >> x >> y >> z;
       V.emplace_back(x, y, z);
-    } else if (starts_with(line, "f ")) {
+    } else if (starts_with(std::string_view(line), "f ")) {
       std::istringstream iss(line);
       char ch; iss >> ch;
       std::vector<int> idxs; std::string tok;

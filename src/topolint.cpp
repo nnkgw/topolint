@@ -43,6 +43,7 @@
 #include <tuple>
 #include <algorithm>
 #include <cstring>
+#include <string_view> // C++20
 
 struct Face { int a, b, c; }; // 0-based indices
 
@@ -59,8 +60,8 @@ struct EdgeKeyHash {
   }
 };
 
-static bool starts_with(const std::string& s, const char* p) {
-  return s.size() >= std::strlen(p) && std::equal(p, p + std::strlen(p), s.begin());
+static bool starts_with(std::string_view s, std::string_view prefix) {
+  return s.starts_with(prefix);
 }
 
 // Parse integer before first '/' (OBJ index)

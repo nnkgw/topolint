@@ -61,17 +61,6 @@ struct EdgeKeyHash {
   }
 };
 
-/*
-static int parse_index_token(const std::string& tok) { // parse integer before first '/' (vertex)
-  int i = 0;
-  size_t pos = 0;
-  while (pos < tok.size() && tok[pos] != '/') pos++;
-  std::string head = tok.substr(0, pos);
-  if (head.empty()) return 0;
-  try { i = std::stoi(head); } catch (...) { i = 0; }
-  return i;
-}
-*/
 static int parse_index_token(const std::string& tok) noexcept {
   std::string_view sv(tok);
   size_t slash = sv.find('/'); // cut at the first '/'
@@ -85,8 +74,7 @@ static int parse_index_token(const std::string& tok) noexcept {
   return val;
 }
 
-// Convert possibly negative OBJ index (1-based, negatives are relative)
-static int resolve_index(int idx, int n) {
+static int resolve_index(int idx, int n) { // Convert OBJ index (1-based, negatives are relative)
   if (idx > 0) return idx - 1;
   if (idx < 0) return n + idx;
   return -1;

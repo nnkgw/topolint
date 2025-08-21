@@ -1,0 +1,15 @@
+# Boundary edge count abnormal at v1: total boundary edges around v1 = 4
+# Two open fans share the same vertex but are disconnected (no Y-edge, no T-junction)
+v 0.0 0.0 0.0   # 1: center v1
+v 1.0 0.0 0.0   # 2: chain A (a)
+v 0.6 0.7 0.0   # 3: chain A (b)
+v 0.0 1.0 0.0   # 4: chain A (c)
+v -0.8 -0.2 0.0 # 5: single tri (d)
+v -0.2 -1.0 0.0 # 6: single tri (e)
+
+# Open fan A (a small chain of two tris)
+f 1 2 3
+f 1 3 4
+
+# Open fan B (a single tri disconnected from A)
+f 1 5 6

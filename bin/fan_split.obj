@@ -1,0 +1,18 @@
+# Fan split around a single vertex v1: two closed fans (no Y-edge, no T-junction)
+v 0.0 0.0 0.0   # 1: center v1
+v 1.0 0.0 0.0   # 2: ring A (a)
+v 0.5 0.866 0.0 # 3: ring A (b)
+v -0.5 0.866 0.0# 4: ring A (c)
+v -1.0 0.0 0.0  # 5: ring B (d)
+v -0.5 -0.866 0.# 6: ring B (e)
+v 0.5 -0.866 0. # 7: ring B (f)
+
+# Ring A (closed fan around v1)
+f 1 2 3
+f 1 3 4
+f 1 4 2
+
+# Ring B (another closed fan around v1)
+f 1 5 6
+f 1 6 7
+f 1 7 5

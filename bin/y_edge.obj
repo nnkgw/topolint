@@ -1,0 +1,11 @@
+# Y-edge test (triangles only): three faces share edge 1-2
+v 0.0 0.0 0.0   # v1
+v 1.0 0.0 0.0   # v2
+v 0.5 0.2 0.0   # v3 (above)
+v 0.5 -0.2 0.0  # v4 (below)
+v 0.5 0.0 0.2   # v5 (out of plane)
+
+# Three triangles all using the same edge (1,2)
+f 1 2 3
+f 1 4 2
+f 1 2 5

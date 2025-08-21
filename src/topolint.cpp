@@ -1,3 +1,8 @@
+// Non-manifold detector + visualizer (freeglut + glm)
+// Detects and colorizes:
+// 1) Y-edge (edge incident to >2 faces)        -> RED lines
+// 2) Non-manifold vertex (broken fan, etc.)    -> YELLOW points
+// 3) T-junction (vertex lies on interior edge) -> CYAN points + edges
 #if defined(WIN32)
 #pragma warning(disable:4996)
 #include <GL/glut.h>
@@ -19,19 +24,12 @@
 #include <GL/freeglut.h>
 #endif // unix
 
-// Non-manifold detector + visualizer (freeglut + glm)
-// Detects and colorizes:
-// 1) Y-edge (edge incident to >2 faces)        -> RED lines
-// 2) Non-manifold vertex (broken fan, etc.)    -> YELLOW points
-// 3) T-junction (vertex lies on interior edge) -> CYAN points + edges
-// Indentation: 2 spaces. Comments in English.
 #include <glm/glm.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
 
 #include <cstdio>
-#include <cstdlib>
 #include <cctype>
 #include <string>
 #include <vector>
@@ -54,9 +52,10 @@ struct EdgeKey {
   EdgeKey(int a, int b) { if (a < b) { u = a; v = b; } else { u = b; v = a; } }
   bool operator==(const EdgeKey& o) const { return u == o.u && v == o.v; }
 };
+
 struct EdgeKeyHash {
   size_t operator()(const EdgeKey& e) const {
-    return (static_cast<size_t>(e.u) << 32) ^ static_cast<size_t>(e.v);
+    return (static_cast<size_t>(e.u) << 32) | static_cast<size_t>(e.v);
   }
 };
 

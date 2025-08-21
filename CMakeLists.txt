@@ -38,7 +38,7 @@ add_custom_command(
 endif(MSVC)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-  add_definitions(-std=gnu++17)
+  add_definitions(-std=c++20)
 #  set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
   if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
     include_directories(/opt/homebrew/include)

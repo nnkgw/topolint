@@ -104,11 +104,11 @@ static bool load_obj(const std::string& path, Mesh& mesh) {
       std::vector<int> idxs; std::string tok;
       while (iss >> tok) {
         int raw = parse_index_token(tok);
-        int id = resolve_index(raw, (int)V.size());
+        int id  = resolve_index(raw, (int)V.size());
         if (id < 0 || id >= (int)V.size()) {
           std::cerr << "Invalid index in face: " << tok << "\n"; return false;
         }
-        idxs.push_back(id);
+        idxs.emplace_back(id);
       }
       if (idxs.size() < 3) continue;
       for (size_t k = 1; k + 1 < idxs.size(); ++k) F.push_back({idxs[0], idxs[k], idxs[k + 1]});

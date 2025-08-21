@@ -60,10 +60,6 @@ struct EdgeKeyHash {
   }
 };
 
-static bool starts_with(std::string_view s, std::string_view prefix) {
-  return s.starts_with(prefix);
-}
-
 // Parse integer before first '/' (OBJ index)
 static int parse_index_token(const std::string& tok) {
   int i = 0;
@@ -96,12 +92,12 @@ static bool load_obj(const std::string& path, Mesh& mesh) {
   std::vector<Face> F;
   while (std::getline(ifs, line)) {
     if (line.empty()) continue;
-    if (starts_with(line, "v ")) {
+    if (line.starts_with("v ")) {
       std::istringstream iss(line);
       char ch; float x, y, z;
       iss >> ch >> x >> y >> z;
       V.emplace_back(x, y, z);
-    } else if (starts_with(line, "f ")) {
+    } else if (line.starts_with("f ")) {
       std::istringstream iss(line);
       char ch; iss >> ch;
       std::vector<int> idxs; std::string tok;

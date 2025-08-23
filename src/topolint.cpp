@@ -224,15 +224,19 @@ static bool g_show_tj = true;
 
 // ---------- detection ----------
 static void detect_nonmanifold() {
-  g_y_edges.clear(); g_nm_vertices.clear();
-  g_tjs.clear(); g_tj_vertices.clear(); g_tj_edges.clear();
+  g_y_edges.clear();
+  g_nm_vertices.clear();
+  g_tjs.clear();
+  g_tj_vertices.clear();
+  g_tj_edges.clear();
 
   // Y-edge
   for (const auto& kv : g_edge2faces) if (kv.second.size() > 2) g_y_edges.push_back(kv.first);
 
   // Non-manifold vertex
-  for (int v = 0; v < (int)g_mesh.V.size(); ++v)
+  for (int v = 0; v < (int)g_mesh.V.size(); ++v) {
     if (!vertex_is_manifold(v, g_mesh.F, g_edge2faces, g_vfaces)) g_nm_vertices.push_back(v);
+  }
 
   // T-junctions
   double diag = bbox_diag(g_mesh.V);

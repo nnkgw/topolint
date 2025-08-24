@@ -158,11 +158,7 @@ static void build_vertex_faces(int nv, const std::vector<Face>& F, std::vector<s
   }
 }
 
-static bool vertex_is_manifold(
-  int v,
-  const std::vector<Face>& F,
-  const std::unordered_map<EdgeKey, std::vector<int>, EdgeKeyHash>& edge2faces,
-  const std::vector<std::vector<int>>& vfaces) {
+static bool vertex_is_manifold(int v, const std::vector<Face>& F, const std::unordered_map<EdgeKey, std::vector<int>, EdgeKeyHash>& edge2faces, const std::vector<std::vector<int>>& vfaces) {
   const auto& faces = vfaces[v];
   if (faces.empty()) return true;
 
@@ -230,12 +226,16 @@ static void detect_nonmanifold() {
   g_tj_vertices.clear();
   g_tj_edges.clear();
 
-  // Y-edge
-  for (const auto& kv : g_edge2faces) if (kv.second.size() > 2) g_y_edges.push_back(kv.first);
+  for (const auto& kv : g_edge2faces) { // Y-edge
+    if (kv.second.size() > 2) {
+      g_y_edges.push_back(kv.first);
+    }
+  }
 
-  // Non-manifold vertex
-  for (int v = 0; v < (int)g_mesh.V.size(); ++v) {
-    if (!vertex_is_manifold(v, g_mesh.F, g_edge2faces, g_vfaces)) g_nm_vertices.push_back(v);
+  for (int v = 0; v < (int)g_mesh.V.size(); ++v) { // Non-manifold vertex
+    if (!vertex_is_manifold(v, g_mesh.F, g_edge2faces, g_vfaces)) {
+      g_nm_vertices.push_back(v);
+    }
   }
 
   // T-junctions

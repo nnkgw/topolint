@@ -226,7 +226,7 @@ static void detect_nonmanifold() {
   g_tj_vertices.clear();
   g_tj_edges.clear();
 
-  for (const auto& kv : g_edge2faces) { // Y-edge
+  for (const auto& kv : g_edge2faces) {            // Y-edge
     if (kv.second.size() > 2) {
       g_y_edges.push_back(kv.first);
     }
@@ -238,8 +238,7 @@ static void detect_nonmanifold() {
     }
   }
 
-  // T-junctions
-  double diag = bbox_diag(g_mesh.V);
+  double diag = bbox_diag(g_mesh.V);               // T-junctions
   double eps = std::max(1e-7, 1e-6 * diag);
 
   for (const auto& kv : g_edge2faces) {

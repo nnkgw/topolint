@@ -408,7 +408,7 @@ static void reshape_cb(int w, int h) {
 }
 
 static void keyboard_cb(unsigned char key, int, int) {
-  if (key == 'q' || key == 27) std::exit(0);
+  if (key == 'q' || key == 27) std::exit(0); // q or ESC
   if (key == 'r') { g_yaw = g_pitch = 0.0f; g_dist = 3.0f * g_radius; g_panx = g_pany = 0.0f; }
   if (key == '1') g_show_yedge = !g_show_yedge;
   if (key == '2') g_show_nmvert = !g_show_nmvert;
